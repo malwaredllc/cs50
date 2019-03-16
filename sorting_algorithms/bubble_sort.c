@@ -6,6 +6,8 @@ int main(void)
     int arr[] = {2, 5, 1, 6, 4, 8, 3};
     int len = sizeof(arr) / sizeof(int);
     int sorted = 0;
+
+    // Bubble sort
     while (sorted == 0)
     {
         sorted = 1;
@@ -20,6 +22,8 @@ int main(void)
             }
         }
     }
+
+    // Display result and exit cleanly
     for (int i = 0; i < len; i++)
     {
         printf("%i ", arr[i]);

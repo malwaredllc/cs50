@@ -3,24 +3,24 @@
 
 int main(void)
 {
-    int arr[] = {2, 5, 1, 6, 4, 8, 3, 7};
+    int arr[] = {2, 5, 1, 6, 4, 0, 8, 3, 9, 7};
     int len = sizeof(arr) / sizeof(int);
 
-    // Print arr to stdout
+     // Print arr to stdout
     printf("unsorted: ");
     for (int n = 0; n < len; n++)
     {
         printf("%i ", arr[n]);
     }
     printf("\n");
-
+    
     // Insertion sort
-    for (int i = 0; i < len - 1; i ++)
+    for (int i = 0; i < len - 1; i++)
     {
-        int x = arr[i];
-        int y = arr[i + 1];
         int ii = i + 1;
- 
+        int x  = arr[i];
+        int y  = arr[ii];
+
         // Iterate over arr to find next lowest value
         for (int j = i; j < len; j++)
         {
@@ -31,22 +31,23 @@ int main(void)
             }
         }
         
-        // Copy values from arr between indexes i and ii to temporary array
         int tmplen = ii - i;
         if (tmplen > 0)
         {
+            // Copy values from arr between indexes i and ii to tmp
             int tmp[tmplen];
-            for (int k = 0; k < ii; k++)
+            for (int k = i, j = 0; k < ii && j < tmplen; k++, j++)
             {
-                tmp[k] = arr[k];
+                tmp[j] = arr[k];
             }
 
             // Copy next lowest value to index i
             arr[i] = y;
 
-            for (int l = i; l < ii; l ++)
+            // Copy values from tmp into arr with indexes offset +1
+            for (int l = i, m = 0; l < ii && m < tmplen ; l++, m++)
             {
-                arr[l + 1] = tmp[l];
+                arr[l + 1] = tmp[m];
             }
         }
     }

@@ -3,7 +3,7 @@
 
 int main(void)
 {
-    int arr[] = {2, 5, 1, 6, 4, 8, 3, 7};
+    int arr[] = {2, 5, 1, 6, 4, 0, 8, 3, 9, 7};
     int len = sizeof(arr) / sizeof(int);
     int sorted = 0;
 

@@ -1,4 +1,4 @@
-# Questions
+# Solution to PSET3 Questions
 
 ## What's `stdint.h`?
 
@@ -10,10 +10,10 @@ Using integer types with specific bit widths ensures portability of your program
 
 ## How many bytes is a `BYTE`, a `DWORD`, a `LONG`, and a `WORD`, respectively?
 
-`BYTE` = 1 byte
-`WORD` = 2 bytes
+`BYTE`  = 1 byte
+`WORD`  = 2 bytes
 `DWORD` = 4 bytes
-`LONG` = 8 bytes
+`LONG`  = 8 bytes
 
 ## What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? Leading bytes used to identify file formats (with high probability) are generally called "magic numbers."
 

@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
+// Solution to PSET0: "Hello"
 #include <cs50.h>
+#include <stdio.h>
 
 int main(int c, string argv[])
 {

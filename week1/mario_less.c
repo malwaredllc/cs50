@@ -1,3 +1,4 @@
+// Solution to PSET1: "Mario (more)"
 #include <cs50.h>
 #include <stdio.h>
 

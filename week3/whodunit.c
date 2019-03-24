@@ -1,5 +1,4 @@
-// Copies a BMP file
-
+// Solution to PSET3: "Whodunit"
 #include <stdio.h>
 #include <stdlib.h>
 

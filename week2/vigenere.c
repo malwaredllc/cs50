@@ -1,3 +1,4 @@
+// Solution to PSET2: "Vigenere Cipher"
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>

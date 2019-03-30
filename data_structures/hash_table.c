@@ -28,15 +28,15 @@ int main(void)
     // initialize hash table
     hash_table* h = init();
 
-    // insert string into linked list at array index hash_code
+    // insert test strings into hash table
     insert(h, (unsigned char*) "Aaron");
-    insert(h, (unsigned char*) "Bobby");
+    insert(h, (unsigned char*) "Aaron"); // collision test
     insert(h, (unsigned char*) "Charlie");
 
-    // lookup strings
-    find(h, (unsigned char*) "Aaron");
-    find(h, (unsigned char*) "Bradley");
-    find(h, (unsigned char*) "Charlie");
+    // lookup test strings
+    find(h, (unsigned char*) "Aaron"); // exists
+    find(h, (unsigned char*) "Bradley"); // does not exist
+    find(h, (unsigned char*) "Charlie"); // exists
 
     // success
     return 0;
@@ -170,4 +170,3 @@ unsigned long hash(unsigned char *str)
 
     return h;
 }
-

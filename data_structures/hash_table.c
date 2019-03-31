@@ -24,37 +24,46 @@ typedef struct
 hash_table* init(void);
 unsigned long hash(unsigned char* str);
 int find(hash_table* h, char data[]);
+int load(hash_table* h, char filename[]);
 void insert(hash_table* h, char* data);
 void delete(hash_table* h, char data[]);
-void load(hash_table* h, char filename[]);
 void destroy(hash_table* h);
 void destroy_sll(node* head);
 
-int main(void)
+int main(int argc, char* argv[])
 {
+    // display usage information and exit if not correct number of command-line arguments
+    if (argc != 2)
+    {
+        printf("Usage: ./hash_table wordlist\n");
+        return 1;
+    }
     // initialize hash table
     hash_table* h = init();
 
     // load wordlist into hash table
-    load(h, "words.txt");
+    if (!load(h, argv[1]))
+    {
 
-    // lookup test strings
-    find(h, "arm");
-    find(h, "wasp");
-    find(h, "zoology");
-    find(h, "biology");
+        // lookup test strings
+        find(h, "arm");
+        find(h, "wasp");
+        find(h, "zoology");
+        find(h, "biology");
 
-    // delete test strings
-    delete(h, "wasp");
+        // delete test strings
+        delete(h, "wasp");
 
-    // lookup deleted test string
-    find(h, "abacus");
+        // lookup deleted test string
+        find(h, "abacus");
 
-    // destroy hash table
-    destroy(h);
+        // destroy hash table
+        destroy(h);
 
-    // success
-    return 0;
+        // success
+        return 0;
+    }
+    return 1;
 }
 
 hash_table* init(void)
@@ -205,7 +214,7 @@ void delete(hash_table* h, char data[])
     printf("\n");
 }
 
-void load(hash_table* h, char filename[])
+int load(hash_table* h, char filename[])
 {
     // initialize temporary array
     char line[TOT][BUF];
@@ -214,15 +223,25 @@ void load(hash_table* h, char filename[])
     // get pointer to open file
     FILE* plist = fopen(filename, "r");
 
-    // read lines from file into array
-    while(fgets(line[i], BUF, plist))
+    // error if file not found
+    if (!plist)
     {
-        // replace '\n' from fgets
-        line[i][strlen(line[i]) - 1] = '\0';
+        printf("Error: file '%s' not found\n", filename);
+        return 1;
+    }
+    else
+    {
+        // read lines from file into array
+        while(fgets(line[i], BUF, plist))
+        {
+            // replace '\n' from fgets
+            line[i][strlen(line[i]) - 1] = '\0';
 
-        // insert string into hash table
-        insert(h, line[i]);
-        i++;
+            // insert string into hash table
+            insert(h, line[i]);
+            i++;
+        }
+        return 0;
     }
 }
 

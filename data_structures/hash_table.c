@@ -22,6 +22,7 @@ hash_table* init(void);
 unsigned long hash(unsigned char *str);
 int find(hash_table* h, unsigned char* str);
 void insert(hash_table* h, unsigned char* str);
+void delete(hash_table* h, unsigned char* str);
 
 int main(void)
 {
@@ -37,6 +38,9 @@ int main(void)
     find(h, (unsigned char*) "Aaron"); // exists
     find(h, (unsigned char*) "Bradley"); // does not exist
     find(h, (unsigned char*) "Charlie"); // exists
+
+    // delete test strings
+    delete(h, (unsigned char*) "Charlie");
 
     // success
     return 0;
@@ -78,7 +82,7 @@ void insert(hash_table* h, unsigned char* str)
     // generate hash code of string and mod by array length to keep it within bounds
     int index = hash(str) % len;
 
-    // check if node at index has a value
+    /* check if node at index has a value
     if (!h->arr[index]->str)
     {
         // assign value to node
@@ -86,24 +90,25 @@ void insert(hash_table* h, unsigned char* str)
     }
     else
     {
-        // allocate memory for new node
-        node* n = malloc(sizeof(node));
+    */
+    // allocate memory for new node
+    node* n = malloc(sizeof(node));
 
-        // assign value to new node
-        n->str = str;
+    // assign value to new node
+    n->str = str;
 
-        // return error if unable to allocate memory
-        if (!n)
-        {
-            printf("Error: unable to allocate memory\n");
-        }
-
-        // point new node to first node of the singly linked list
-        n->next = h->arr[index]->next;
-
-        // point head to new node
-        h->arr[index]->next = n;
+    // return error if unable to allocate memory
+    if (!n)
+    {
+        printf("Error: unable to allocate memory\n");
     }
+
+    // point new node to first node of the singly linked list
+    n->next = h->arr[index]->next;
+
+    // point head to new node
+    h->arr[index]->next = n;
+
 
     // print debugging information to stdout
     printf("Added: ");
@@ -144,7 +149,6 @@ int find(hash_table *h, unsigned char* str)
         {
             trav = trav->next;
         }
-
         // return false if traversal pointer has reached end of the singly linked list
         else
         {
@@ -155,6 +159,54 @@ int find(hash_table *h, unsigned char* str)
             }
             printf("\n");
             return 0;
+        }
+    }
+}
+
+void delete(hash_table* h, unsigned char *str)
+{
+    // get length of hash table array
+    int len = sizeof(h->arr) / sizeof(node*);
+
+    // generate hash code of string and mod by array length to keep it within bounds
+    int index = hash(str) % len;
+
+    // init traversal pointers at the head of the singly linked list
+    node* trav = h->arr[index];
+    node* prev = h->arr[index];
+
+    // traverse nodes of the singly linked list
+    while (1)
+    {
+        // move traversal pointers to next node if pointer is not null
+        prev = trav;
+        if (trav->next)
+        {
+            trav = trav->next;
+        }
+        // return false if traversal pointer has reached end of the singly linked list
+        else
+        {
+            printf("Not found: ");
+            for (int i = 0; str[i] != '\0'; i++)
+            {
+                printf("%c", str[i]);
+            }
+            printf("\n");
+            break;
+        }
+        // delete node from linked list if node value is equal to input value
+        if (trav->str == str)
+        {
+            prev->next = trav->next;
+            free(trav);
+            printf("Deleted: ");
+            for (int i = 0; str[i] != '\0'; i++)
+            {
+                printf("%c", str[i]);
+            }
+            printf("\n");
+            break;
         }
     }
 }
@@ -170,3 +222,4 @@ unsigned long hash(unsigned char *str)
 
     return h;
 }
+

@@ -1,46 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
+#define BUF 128
+#define TOT 10000
+#define VERBOSE 0
 
 // singly linked list node structure
-typedef struct _node
+typedef struct node
 {
-    unsigned char* str;
-    struct _node* next;
+    struct node* next;
+    char* data;
 } node;
 
 // hash table structure
 typedef struct
 {
-    node* arr[10];
+    node* arr[100];
 } hash_table;
 
 
 // prototypes
 hash_table* init(void);
-unsigned long hash(unsigned char *str);
-int find(hash_table* h, unsigned char* str);
-void insert(hash_table* h, unsigned char* str);
-void delete(hash_table* h, unsigned char* str);
+unsigned long hash(unsigned char* str);
+int find(hash_table* h, char data[]);
+void insert(hash_table* h, char* data);
+void delete(hash_table* h, char data[]);
+void load(hash_table* h, char filename[]);
 
 int main(void)
 {
     // initialize hash table
     hash_table* h = init();
 
-    // insert test strings into hash table
-    insert(h, (unsigned char*) "Aaron");
-    insert(h, (unsigned char*) "Aaron"); // collision test
-    insert(h, (unsigned char*) "Charlie");
+    // load wordlist into hash table
+    load(h, "words.txt");
 
     // lookup test strings
-    find(h, (unsigned char*) "Aaron"); // exists
-    find(h, (unsigned char*) "Bradley"); // does not exist
-    find(h, (unsigned char*) "Charlie"); // exists
+    find(h, "arm");
+    find(h, "wasp");
+    find(h, "zoology");
+    find(h, "biology");
 
     // delete test strings
-    delete(h, (unsigned char*) "Charlie");
+    delete(h, "wasp");
+
+    find(h, "abacus");
 
     // success
     return 0;
@@ -65,7 +71,6 @@ hash_table* init(void)
         {
             printf("Unable to allocate memory for node\n");
         }
-        n->str = NULL;
         n->next = NULL;
         h->arr[i] = n;
     }
@@ -74,28 +79,19 @@ hash_table* init(void)
     return h;
 }
 
-void insert(hash_table* h, unsigned char* str)
+void insert(hash_table* h, char* data)
 {
     // get length of hash table array
     int len = sizeof(h->arr) / sizeof(node*);
 
     // generate hash code of string and mod by array length to keep it within bounds
-    int index = hash(str) % len;
+    int index = hash((unsigned char*) data) % len;
 
-    /* check if node at index has a value
-    if (!h->arr[index]->str)
-    {
-        // assign value to node
-        h->arr[index]->str = str;
-    }
-    else
-    {
-    */
     // allocate memory for new node
     node* n = malloc(sizeof(node));
 
     // assign value to new node
-    n->str = str;
+    n->data = data;
 
     // return error if unable to allocate memory
     if (!n)
@@ -109,115 +105,129 @@ void insert(hash_table* h, unsigned char* str)
     // point head to new node
     h->arr[index]->next = n;
 
-
-    // print debugging information to stdout
-    printf("Added: ");
-    for (int i = 0; str[i] != '\0'; i++)
+    // print output to stdout if verbose mode enabled
+    if (VERBOSE)
     {
-        printf("%c", str[i]);
+        printf("Added: ");
+        for (int i = 0; data[i] != '\0'; i++)
+        {
+            printf("%c", data[i]);
+        }
+        printf("\n");
     }
-    printf("\n");
 }
 
-int find(hash_table *h, unsigned char* str)
+int find(hash_table *h, char data[])
 {
     // get length of hash table array
     int len = sizeof(h->arr) / sizeof(node*);
 
     // generate hash code of string and mod by array length to keep it within bounds
-    int index = hash(str) % len;
+    int index = hash((unsigned char*) data) % len;
 
     // init a traversal pointer at the head of the singly linked list
     node* trav = h->arr[index];
 
     // traverse nodes of the singly linked list
-    while (1)
+    while ((trav = trav->next))
     {
         // return true if node value is equal to input value
-        if (trav->str == str)
+        if (!strcmp(trav->data, data))
         {
-            printf("Found: ");
-            for (int i = 0; str[i] != '\0'; i++)
+            // print output to stdout
+            printf("Found:      ");
+            for (int i = 0; data[i] != '\0'; i++)
             {
-                printf("%c", str[i]);
+                printf("%c", data[i]);
             }
             printf("\n");
             return 1;
         }
-        // move traversal pointer to next node if pointer is not null
-        if (trav->next != NULL)
-        {
-            trav = trav->next;
-        }
-        // return false if traversal pointer has reached end of the singly linked list
-        else
-        {
-            printf("Not found: ");
-            for (int i = 0; str[i] != '\0'; i++)
-            {
-                printf("%c", str[i]);
-            }
-            printf("\n");
-            return 0;
-        }
     }
+
+    // return false if traversal pointer has reached end of the singly linked list
+    printf("Not found:  ");
+    for (int i = 0; data[i] != '\0'; i++)
+    {
+        printf("%c", data[i]);
+    }
+    printf("\n");
+
+    return 0;
 }
 
-void delete(hash_table* h, unsigned char *str)
+void delete(hash_table* h, char data[])
 {
     // get length of hash table array
     int len = sizeof(h->arr) / sizeof(node*);
 
     // generate hash code of string and mod by array length to keep it within bounds
-    int index = hash(str) % len;
+    int index = hash((unsigned char*) data) % len;
 
     // init traversal pointers at the head of the singly linked list
     node* trav = h->arr[index];
     node* prev = h->arr[index];
 
     // traverse nodes of the singly linked list
-    while (1)
+    while ((trav = trav->next))
     {
-        // move traversal pointers to next node if pointer is not null
-        prev = trav;
-        if (trav->next)
-        {
-            trav = trav->next;
-        }
-        // return false if traversal pointer has reached end of the singly linked list
-        else
-        {
-            printf("Not found: ");
-            for (int i = 0; str[i] != '\0'; i++)
-            {
-                printf("%c", str[i]);
-            }
-            printf("\n");
-            break;
-        }
         // delete node from linked list if node value is equal to input value
-        if (trav->str == str)
+        if (!strcmp(trav->data, data))
         {
             prev->next = trav->next;
             free(trav);
-            printf("Deleted: ");
-            for (int i = 0; str[i] != '\0'; i++)
+
+            // print output to stdout
+            printf("Deleted:    ");
+            for (int i = 0; data[i] != '\0'; i++)
             {
-                printf("%c", str[i]);
+                printf("%c", data[i]);
             }
             printf("\n");
             break;
         }
+
+        // move previous node traversal pointer to next node
+        prev = prev->next;
+    }
+
+    // return false if traversal pointer has reached end of the singly linked list
+    printf("Not found:  ");
+    for (int i = 0; data[i] != '\0'; i++)
+    {
+        printf("%c", data[i]);
+    }
+    printf("\n");
+}
+
+void load(hash_table* h, char filename[])
+{
+    // initialize temporary array
+    char line[TOT][BUF];
+    int i = 0;
+
+    // get pointer to open file
+    FILE* plist = fopen(filename, "r");
+
+    // read lines from file into array
+    while(fgets(line[i], BUF, plist))
+    {
+        // replace '\n' from fgets
+        line[i][strlen(line[i]) - 1] = '\0';
+
+        // insert string into hash table
+        insert(h, line[i]);
+        i++;
     }
 }
 
 // dbj2 string hash function (http://www.cse.yorku.ca/~oz/hash.html)
-unsigned long hash(unsigned char *str)
+unsigned long hash(unsigned char* key)
 {
     unsigned long h = 5381;
     int c;
 
-    while ((c = *str++))
+    while ((c = *key++))
         h = ((h << 5) + h) + c; /* h * 33 + c */
 
     return h;

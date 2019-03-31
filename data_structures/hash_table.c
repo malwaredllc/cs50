@@ -20,7 +20,6 @@ typedef struct
     node* arr[100];
 } hash_table;
 
-
 // prototypes
 hash_table* init(void);
 unsigned long hash(unsigned char* str);
@@ -28,6 +27,8 @@ int find(hash_table* h, char data[]);
 void insert(hash_table* h, char* data);
 void delete(hash_table* h, char data[]);
 void load(hash_table* h, char filename[]);
+void destroy(hash_table* h);
+void destroy_sll(node* head);
 
 int main(void)
 {
@@ -46,7 +47,11 @@ int main(void)
     // delete test strings
     delete(h, "wasp");
 
+    // lookup deleted test string
     find(h, "abacus");
+
+    // destroy hash table
+    destroy(h);
 
     // success
     return 0;
@@ -218,6 +223,33 @@ void load(hash_table* h, char filename[])
         // insert string into hash table
         insert(h, line[i]);
         i++;
+    }
+}
+
+void destroy(hash_table* h)
+{
+    // iterate through hash table array calling destroy on each singly linked list
+    for (int i = 0, len = sizeof(h->arr) / sizeof(node*); i < len; i++)
+    {
+        destroy_sll(h->arr[i]);
+    }
+    free(h);
+}
+
+void destroy_sll(node* head)
+{
+    // initialize a traversal pointer at the head of the singly linked list
+    node* trav = head;
+
+    // recursively call destroy on the next node until traversal pointer reaches end of the singly linked list
+    while (1)
+    {
+        if (trav->next)
+        {
+            destroy_sll(trav->next);
+        }
+        free(trav);
+        break;
     }
 }
 

@@ -11,7 +11,8 @@ typedef struct _node
 
 // prototypes
 node* init(void);
-char* find(node* root, char key[]);
+char* lookup(node* root, char key[]);
+int find(node* root, char key[], char value[]);
 void insert(node* root, char key[], char value[]);
 
 int main(void)
@@ -19,10 +20,25 @@ int main(void)
     // initialize root node of trie
     node* root = init();
 
-    // insert test key/value pairs
-    insert(root, "1636", "Harvard");
+    // insert key/value pairs
+    char* key = "1636", * value = "Harvard";
+    insert(root, key, value);
     insert(root, "1701", "Yale");
     insert(root, "1739", "Dartmouth");
+    printf("Added: (%s, %s)\n", key, value);
+    printf("Added: (%s, %s)\n", "1701", "Yale");
+    printf("Added: (%s, %s)\n", "1739", "Dartmouth");
+
+    // find key/value pairs
+    char* result;
+    result = find(root, key, value) ? "Found" : "Not found";
+    printf("(%s, %s): %s\n", key, value, result);
+    result = find(root, "1739", "Yale") ? "Found" : "Not found";
+    printf("(%s, %s): %s\n", "1739", "Yale", result);
+
+    // lookup values by key
+    result = lookup(root, "1800");
+    printf("%s\n", result);
 
     // success
     return 0;
@@ -69,4 +85,55 @@ void insert(node* root, char key[], char value[])
     }
     // set value at end of path
     trav->value = value;
+}
+
+int find(node* root, char key[], char value[])
+{
+    // initialize a traversal pointer
+    node* trav = root;
+
+    // iterate through characters in key
+    for (int i = 0, len = strlen(key); i < len; i++)
+    {
+        // convert digit to integer
+        int d = (int) key[i] - '0';
+
+        // return false if pointer to next node on path is null
+        if (!trav->paths[d])
+        {
+            return 0;
+        }
+        // move traversal pointer to next node on path
+        trav = trav->paths[d];
+    }
+    // return true if final node on path is equal to input value, otherwise return false
+    return (strcmp(trav->value, value) == 0);
+
+}
+
+char* lookup(node* root, char key[])
+{
+    // initialize a traversal pointer
+    node* trav = root;
+
+    // allocate memory for result
+    char* result = malloc(sizeof(char));
+
+    // iterate through characters in key
+    for (int i = 0, len = strlen(key); i < len; i++)
+    {
+        // convert digit to integer
+        int d = (int) key[i] - '0';
+
+        // return null byte if pointer to next node on path is null
+        if (!trav->paths[d])
+        {
+            return result;
+        }
+        // move traversal pointer to next node on path
+        trav = trav->paths[d];
+    }
+
+    // return value at final node on path
+    return trav->value;
 }

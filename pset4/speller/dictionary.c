@@ -9,7 +9,7 @@
 #include "dictionary.h"
 
 // Represents number of buckets in a hash table
-#define N 26
+#define N 10000
 
 // Represents a node in a hash table
 typedef struct node
@@ -26,10 +26,16 @@ void delete_sll(node *head);
 node *hashtable[N];
 int wordcount = 0;
 
-// Hashes word to a number between 0 and 25, inclusive, based on its first letter
-unsigned int hash(const char *word)
+// dbj2 string hash function (http://www.cse.yorku.ca/~oz/hash.html)
+unsigned int hash(const char* key)
 {
-    return tolower(word[0]) - 'a';
+    unsigned int h = 5381;
+    int c;
+
+    while ((c = *key++))
+        h = ((h << 5) + h) + tolower(c);
+
+    return h % N;
 }
 
 // Loads dictionary into memory, returning true if successful else false
@@ -118,7 +124,7 @@ bool check(const char *word)
     }
     while (true)
     {
-        if (strcasecmp(trav->word, word) == 0)
+        if (!strcasecmp(trav->word, word))
         {
             return true;
         }
@@ -139,8 +145,9 @@ bool unload(void)
 {
     for (int i = 0; i < N; i++)
     {
-        delete_sll(hashtable[N - 1]);
+        delete_sll(hashtable[i]);
     }
+    free(*hashtable);
     return true;
 }
 

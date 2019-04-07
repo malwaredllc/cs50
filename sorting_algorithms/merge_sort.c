@@ -3,90 +3,31 @@
 #include <time.h>
 
 // Prototypes
-void run100(void);
-void run1000(void);
-void run1000000(void);
-void print_array(int arr[], int len);
 void merge(int arr[], int l, int m, int r);
 void merge_sort(int arr[], int l, int r);
+void print_array(int arr[], int len);
 
-// Main
 int main(void)
 {
+    // initialize unsorted array
+    int arr[] = {2, 5, 1, 6, 4, 0, 8, 3, 9, 7};
 
-    run100();
-    run1000();
-    run1000000();
+    // get array length
+    int len = sizeof(arr) / sizeof(int);
+
+    // display elements of unsorted array
+    printf("unsorted: ");
+    print_array(arr, len);
+
+    // merge sort
+    merge_sort(arr, 0, len - 1);
+
+    // display elements of sorted array
+    printf("sorted:   ");
+    print_array(arr, len);
+
+    // success
     return 0;
-}
-
-// Functions
-void run100(void)
-{
-    FILE *fp;
-    fp = fopen("numbers100.txt","r");
-    int arr[100];
-    int len = sizeof(arr) / sizeof(arr[0]);
-    
-    for (int i = 0; i < len; i++)
-    {
-        fscanf(fp, "%d,", &arr[i]);
-    }
-
-    clock_t begin = clock();
-    merge_sort(arr, 0, len - 1);
-    clock_t end = clock();
-    double runtime = (double)(end - begin) / CLOCKS_PER_SEC;
-
-    printf("%i elements\ntime: %f seconds\n\n", len, runtime);
-}
-
-void run1000(void)
-{
-    FILE *fp;
-    fp = fopen("numbers1000.txt","r");
-    int arr[1000];
-    int len = sizeof(arr) / sizeof(arr[0]);
-
-    for (int i = 0; i < len; i++)
-    {
-        fscanf(fp, "%d,", &arr[i]);
-    }
-
-    clock_t begin = clock();
-    merge_sort(arr, 0, len - 1);
-    clock_t end = clock();
-    double runtime = (double)(end - begin) / CLOCKS_PER_SEC;
-
-    printf("%i elements\ntime: %f seconds\n\n", len, runtime);
-}
-
-void run1000000(void)
-{
-    FILE *fp;
-    fp = fopen("numbers1000000.txt","r");
-    int arr[1000000];
-    int len = sizeof(arr) / sizeof(arr[0]);
-
-    for (int i = 0; i < len; i++)
-    {
-        fscanf(fp, "%d,", &arr[i]);
-    }
-    clock_t begin = clock();
-    merge_sort(arr, 0, len - 1);
-    clock_t end = clock();
-    double runtime = (double)(end - begin) / CLOCKS_PER_SEC;
-    
-    printf("%i elements\ntime: %f seconds\n\n", len, runtime);
-}
-
-void print_array(int arr[], int len)
-{
-    for (int i = 0; i < len; i++)
-    {
-        printf("%i ", arr[i]);
-    }
-    printf("\n");
 }
 
 void merge(int arr[], int l, int m, int r)
@@ -161,4 +102,11 @@ void merge_sort(int arr[], int l, int r)
     }
 }
 
-
+void print_array(int arr[], int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf("%i ", arr[i]);
+    }
+    printf("\n");
+}

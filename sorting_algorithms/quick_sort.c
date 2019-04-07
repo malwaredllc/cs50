@@ -5,6 +5,7 @@
 void swap(int* a, int* b);
 int partition(int arr[], int start, int end);
 void quick_sort(int arr[], int start, int end);
+void print_array(int arr[], int len);
 
 int main(void)
 {
@@ -14,24 +15,16 @@ int main(void)
     // get length of array
     int len = sizeof(arr) / sizeof(int);
 
-    // print unsorted array to stdout
-    printf("Unsorted: ");
-    for (int i = 0; i < len; i++)
-    {
-        printf("%i ", arr[i]);
-    }
-    printf("\n");
+    // display unsorted array
+    printf("unsorted: ");
+    print_array(arr, len);
 
-    // sort array using quick sort
+    // quick sort
     quick_sort(arr, 0, len - 1);
 
-    // print sorted array to stdout
-    printf("Sorted:   ");
-    for (int i = 0; i < len; i++)
-    {
-        printf("%i ", arr[i]);
-    }
-    printf("\n");
+    // display sorted array
+    printf("sorted:   ");
+    print_array(arr, len);
 
     // success
     return 0;
@@ -83,4 +76,14 @@ void swap(int* a, int* b)
     int tmp = *a;
     *a = *b;
     *b = tmp;
+}
+
+
+void print_array(int arr[], int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf("%i ", arr[i]);
+    }
+    printf("\n");
 }

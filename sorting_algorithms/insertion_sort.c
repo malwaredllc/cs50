@@ -1,20 +1,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// prototypes
+void insertion_sort(int arr[], int len);
+void print_array(int arr[], int len);
+
 int main(void)
 {
-    int arr[] = {2, 5, 1, 6, 4, 0, 8, 3, 9, 7};
+    // initialize unsorted array
+    int arr[] = {4, 7, 2, 1, 9, 6, 0, 8, 5, 3};
+
+    // get length of array
     int len = sizeof(arr) / sizeof(int);
 
-     // Print arr to stdout
+    // display unsorted array
     printf("unsorted: ");
-    for (int n = 0; n < len; n++)
-    {
-        printf("%i ", arr[n]);
-    }
-    printf("\n");
+    print_array(arr, len);
     
-    // Insertion sort
+    // insertion sort
+    insertion_sort(arr, len);
+
+    // display sorted array
+    printf("sorted:   ");
+    print_array(arr, len);
+
+    // success
+    return 0;
+}
+
+void insertion_sort(int arr[], int len)
+{
     for (int i = 0; i < len - 1; i++)
     {
         int ii = i + 1;
@@ -51,15 +66,14 @@ int main(void)
             }
         }
     }
-
-    // Display result and exit cleanly
-    printf("sorted:   ");
-    for (int n = 0; n < len; n++)
-    {
-        printf("%i ", arr[n]);
-    }
-    printf("\n");
-    return 0;
 }
 
+void print_array(int arr[], int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf("%i ", arr[i]);
+    }
+    printf("\n");
+}
 

@@ -1,21 +1,36 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// prototypes
+void selection_sort(int arr[], int len);
+void print_array(int arr[], int len);
+
 int main(void)
 {
+    // initialize unsorted array
     int arr[] = {2, 5, 1, 6, 4, 0, 8, 3, 9, 7};
+
+    // get length of array
     int len = sizeof(arr) / sizeof(int);
     
-    // Print arr to stdout
+    // display unsorted array
     printf("unsorted: ");
-    for (int n = 0; n < len; n++)
-    {
-        printf("%i ", arr[n]);
-    }
-    printf("\n");
+    print_array(arr, len);
 
-    // Selection sort
-    for (int i = 0; i < len - 1; i++)
+    // selection sort
+    selection_sort(arr, len);
+
+    // dislay sorted array
+    printf("sorted:   ");
+    print_array(arr, len);
+
+    // success
+    return 0;
+}
+
+void selection_sort(int arr[], int len)
+{
+   for (int i = 0; i < len - 1; i++)
     {
         int x = arr[i];
         int y = arr[i + 1];
@@ -36,15 +51,14 @@ int main(void)
             arr[k] = x;
         }
     }
-
-    // Dislay result and exit cleanly
-    printf("sorted:   ");
-    for (int n = 0; n < len; n++)
-    {
-        printf("%i ", arr[n]);
-    }
-    printf("\n");
-    return 0;
 }
 
+void print_array(int arr[], int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf("%i ", arr[i]);
+    }
+    printf("\n");
+}
 

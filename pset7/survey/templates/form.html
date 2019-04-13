@@ -8,7 +8,26 @@
     <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
     <form action="/form" method="post">
 
-        <!-- TODO -->
+        <div class="form-group">
+            <input class="form-control" name="name" placeholder="Name" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <select name="house">
+                <option name="" disabled selected>House</option>
+                <option name="Gryffindor">Gryffindor</option>
+                <option name="Hufflepuff">Hufflepuff</option>
+                <option name="Ravenclaw">Ravenclaw</option>
+                <option name="Slytherin">Slytherin</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="radio" name="position" value="Chaser">Chaser<br>
+            <input type="radio" name="position" value="Beater">Beater<br>
+            <input type="radio" name="position" value="Seeker">Seeker<br>
+            <input type="radio" name="position" value="Keeper">Keeper<Br>
+        </div>
 
         <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
         <button class="btn btn-primary" type="submit">Submit</button>
@@ -17,8 +36,19 @@
 
     <script>
 
-        /* TODO */
+       document.querySelector('form').onsubmit = function() {
+
+            // return false if no House has been selected
+            if (document.querySelector('select').value == 'House') {
+                alert('You must provide your House!');
+                return false;
+            }
+
+            // Otherwise return true
+            return true;
+            };
 
     </script>
 
 {% endblock %}
+

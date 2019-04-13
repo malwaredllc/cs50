@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>House</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student[0] }}</td>
+                <td>{{ student[1] }}</td>
+                <td>{{ student[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
